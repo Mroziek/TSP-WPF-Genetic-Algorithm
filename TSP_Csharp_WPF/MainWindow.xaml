@@ -5,8 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TSP_Csharp_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WPF TSP SOLVER" Height="829" Width="1000">
     <Grid>
-        
+        <Canvas x:Name="Map" HorizontalAlignment="Left" Height="800" Margin="194,0,0,0" VerticalAlignment="Top" Width="800" Background="#FFABABAB"/>
+        <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="19,371,0,0" VerticalAlignment="Top" Click="StartButton_Click" Height="30" Width="150" FontSize="16" FontWeight="Bold"/>
+        <Rectangle Fill="#FF710000" HorizontalAlignment="Left" Height="802" Margin="188,0,0,-1.429" Stroke="#FF710000" VerticalAlignment="Top" Width="6"/>
+        <Button x:Name="DataFileButton" Content="Choose Data File" HorizontalAlignment="Left" Margin="19,20,0,0" VerticalAlignment="Top" Width="150" Click="OpenFileButton_Click" Height="30"/>
+
+        <Slider x:Name="SliderIndividuals" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="7,138,0,0" VerticalAlignment="Top" Width="147" Maximum="400" SmallChange="10" TickPlacement="BottomRight" Value="100" LargeChange="40" TickFrequency="10" Minimum="10"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"><Run FontSize="10" Text="Individuals in Generation"/><Run FontSize="10" Text=" (10 - 400)"/></TextBlock>
+        <TextBox Text="{Binding ElementName=SliderIndividuals, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="154,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29"/>
+
+        <Slider x:Name="SliderMutation" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="7,214,0,0" VerticalAlignment="Top" Width="147" Maximum="100" SmallChange="2" TickPlacement="BottomRight" Value="50" LargeChange="5" TickFrequency="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,193,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146"><Run Text="Mutation Chance"/><Run Text=" (0 - 100)"/></TextBlock>
+        <TextBox Text="{Binding Value, ElementName=SliderMutation, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="154,214,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29"/>
+
+        <Slider x:Name="SliderCrossover" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="7,293,0,0" VerticalAlignment="Top" Width="147" Maximum="100" SmallChange="2" TickPlacement="BottomRight" Value="40" LargeChange="5" TickFrequency="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146"><Run Text="Crossover Chance (0-100)"/></TextBlock>
+        <TextBox Text="{Binding Value, ElementName=SliderCrossover, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="154,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="29"/>
+        <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="19,419,0,0" VerticalAlignment="Top"  Height="30" Width="150" FontSize="16" FontWeight="Bold" Click="StopButton_Click"/>
+        <Label x:Name="ScoreLabel" Content="BEST SCORE: ?" HorizontalAlignment="Left" Margin="19,514,0,0" VerticalAlignment="Top" Width="161" FontWeight="Bold" FontSize="14"/>
+        <Label x:Name="LoopCountLabel" Content="Loop: ?" HorizontalAlignment="Left" Margin="19,485,0,0" VerticalAlignment="Top" Width="161" FontWeight="Bold" FontSize="14"/>
+        <Label x:Name="FileNameLabel" Content="File Name: ???" HorizontalAlignment="Left" Margin="19,50,0,0" VerticalAlignment="Top" Height="45" Width="169"/>
+
+
+
     </Grid>
 </Window>
