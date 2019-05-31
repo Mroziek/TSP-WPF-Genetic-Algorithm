@@ -67,6 +67,8 @@ namespace TSP_Csharp_WPF
                 if (filePath == "") MessageBox.Show("File has not been selected");
                 else MessageBox.Show("File not compatibile");
             }
+
+            StartButton.IsEnabled = true;
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
