@@ -8,8 +8,6 @@ namespace TSP_Csharp_WPF
 {
     public class Tour
     {
-        Random r = new Random();
-
         public int[] PathCities;
 
         public Tour(int numberOfCities)
@@ -17,7 +15,7 @@ namespace TSP_Csharp_WPF
             PathCities = new int[numberOfCities];
         }
 
-        public void GenerateRandomPath()
+        public void GenerateRandomPath() //at start application needs first random path - it has to be correct, so it's basically random without repeatations
         {
             bool[] isDrawn = new bool[PathCities.Length];
             int randomCity;
@@ -35,7 +33,7 @@ namespace TSP_Csharp_WPF
             }
         }
 
-        public int CalculateFitness()
+        public int CalculateFitness() //calculate path lenght - uses distances matrix (also includes back to hometown)
         {
             int sumDistancePath = 0;
 
@@ -48,7 +46,7 @@ namespace TSP_Csharp_WPF
             return sumDistancePath;
         }
 
-        public void PrintPath()
+        public void PrintPath() //method to print path when needed ex. when new, better path is found - written for console version of algorithm
         {
             foreach (int city in PathCities)
             {
@@ -57,12 +55,12 @@ namespace TSP_Csharp_WPF
             Console.Write(CalculateFitness());
         }
 
-        public void MutatePath()
+        public void MutatePath() //inversion mutation - select 2 random genes - genes between them are inverted 
         {
             int gen1 = GlobalRandom.r.Next(0, PathCities.Length);
             int gen2 = GlobalRandom.r.Next(0, PathCities.Length);
 
-            if (gen1 > gen2)
+            if (gen1 > gen2) //to be sure that gen1 <= gen2
             {
                 int foo = gen2;
                 gen2 = gen1;
@@ -76,7 +74,7 @@ namespace TSP_Csharp_WPF
                 arr1[x] = PathCities[p];
             }
 
-            Array.Reverse(arr1);
+            Array.Reverse(arr1); //inversion
 
             for (int p = gen1, x = 0; p < gen2; p++, x++)
             {

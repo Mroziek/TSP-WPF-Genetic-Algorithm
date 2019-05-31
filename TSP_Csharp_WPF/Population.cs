@@ -16,7 +16,7 @@ namespace TSP_Csharp_WPF
         public Tour bestPathInPopulation;
         public int lengthofBestPath = int.MaxValue;
 
-        public Population(int numberOfPaths, int numberOfCities)
+        public Population(int numberOfPaths, int numberOfCities) //constructor of population - it creates population with random paths
         {
             PopulationArray = new Tour[numberOfPaths];
             for (int i = 0; i < numberOfPaths; ++i)
@@ -31,7 +31,7 @@ namespace TSP_Csharp_WPF
         }
 
 
-        public void PrintPopulation()
+        public void PrintPopulation() //print whole population to console - for debugging purposes
         {
             foreach (Tour path in PopulationArray)
             {
@@ -42,15 +42,15 @@ namespace TSP_Csharp_WPF
         }
 
 
-        public void CrossoverPopulation(int crossoverChance)
+        public void CrossoverPopulation(int crossoverChance) //crossover - user specify crossover chance - paths are crossovered or just copied to next generation
         {
             Tour[] newPopulationArray = new Tour[numberOfPaths];
-            for (int i = 0; i < numberOfPaths; ++i)
+            for (int i = 0; i < numberOfPaths; ++i) //new empty generation
             {
                 newPopulationArray[i] = new Tour(numberOfCities);
             }
 
-            for (int k = 0; k < PopulationArray.Length; k++)
+            for (int k = 0; k < PopulationArray.Length; k++) //loop all paths
             {
                 int individual1 = k;
                 int individual2 = GlobalRandom.r.Next(0, numberOfPaths);
@@ -67,10 +67,10 @@ namespace TSP_Csharp_WPF
                 }
             }
 
-            Array.Copy(newPopulationArray, PopulationArray, newPopulationArray.Length);
+            Array.Copy(newPopulationArray, PopulationArray, newPopulationArray.Length); //copy new generation to main population array 
         }
 
-        int[] CrossoverPaths(int[] path1, int[] path2)
+        int[] CrossoverPaths(int[] path1, int[] path2) //crossover 2 paths
         {
             int pos1 = GlobalRandom.r.Next(0, path1.Length);
             int pos2 = GlobalRandom.r.Next(0, path1.Length);
@@ -118,11 +118,11 @@ namespace TSP_Csharp_WPF
         }
 
 
-        public void Mutation(int mutationChance)
+        public void Mutation(int mutationChance) //mutate whole population
         {
             for (int k = 0; k < PopulationArray.Length; k++)
             {
-                if (GlobalRandom.r.Next(0, 100) < mutationChance)
+                if (GlobalRandom.r.Next(0, 100) < mutationChance) //user specify mutation chance - path mutates or dont change
                 {
                     PopulationArray[k].MutatePath();
                 }
@@ -130,7 +130,7 @@ namespace TSP_Csharp_WPF
         }
 
 
-        public void TournamentSelection(int startPrinting)
+        public void TournamentSelection(int startPrinting) //get the best paths in population. Application make tournaments between 3 random paths - the best of them is in new population.
         {
             Tour[] newPopulationArray = new Tour[numberOfPaths];
             for (int i = 0; i < numberOfPaths; ++i)

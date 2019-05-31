@@ -12,14 +12,15 @@ namespace TSP_Csharp_WPF
     public partial class MainWindow : Window
     {
         string filePath = "";
-        static CancellationTokenSource tokenSource2 = new CancellationTokenSource();
-        CancellationToken ct = tokenSource2.Token;
+
+        static CancellationTokenSource tokenSource = new CancellationTokenSource(); //token needed to enable stop option
+        CancellationToken ct = tokenSource.Token;
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                StartButton.IsEnabled = false;
+                StartButton.IsEnabled = false; //block button to block more than 1 genetic algorithm tasks at the same moment
 
                 List<City> CityList = FileReader.ReadFile(filePath); //Generate List with Cities (XY coords)
                 Distances.distancesArray = FileReader.CreateDistanceMatrix(CityList); //Create Distances Matrix between cities (Faster calculations during main loop)
@@ -34,55 +35,50 @@ namespace TSP_Csharp_WPF
                 int numberOfCities = CityList.Count;
                 Population population = new Population(individualsInGeneration, numberOfCities); //first random population
 
-                tokenSource2 = new CancellationTokenSource();
-                ct = tokenSource2.Token;
+                tokenSource = new CancellationTokenSource(); //token needed to enable stop option
+                ct = tokenSource.Token;
 
                 Task.Factory.StartNew(async () => //main loop
                 {
                     for (int i = 0; i <= numberOfLoops; i++)
                     {
-                        if (ct.IsCancellationRequested) return;
+                        if (ct.IsCancellationRequested) return; //if button stop is clicked - abort task
                         population.CrossoverPopulation(crossoverChance);
                         population.Mutation(mutationChance);
                         population.TournamentSelection(10000);
                         if (i % 50 == 0 && i < 2000) //GUI update is more often during first loops
                         {
-                            DrawCities(CityList, mapScale);
                             DrawLines(population.bestPathInPopulation, CityList, mapScale);
-                            await Task.Delay(1);
                         }
                         else if (i % 250 == 0)
                         {
-                            DrawCities(CityList, mapScale);
                             DrawLines(population.bestPathInPopulation, CityList, mapScale);
-                            await Task.Delay(1);
                         }
                         UpdateScore(population.lengthofBestPath);
                         UpdateLoopCount(i); //Best score and loop counter is refreshed in every loop repeatation
                     }
-                }, tokenSource2.Token);
+                }, tokenSource.Token);
             }
             catch (Exception ex)
             {
                 if (filePath == "") MessageBox.Show("File has not been selected");
-                else MessageBox.Show("File not compatibile");
+                else MessageBox.Show("File not compatibile"); //in case of wrong file type
             }
 
-            StartButton.IsEnabled = true;
+            StartButton.IsEnabled = true; //enable start button after algorithm is finished
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            tokenSource2.Cancel();
-            MessageBox.Show("Algorithm is stopped");
-            StartButton.IsEnabled = true;
+            tokenSource.Cancel(); //set token to cancel
+            MessageBox.Show("Algorithm is stopped"); //show message to user
+            StartButton.IsEnabled = true; //enable startbutton (it's locked at the start of genetic algorithm)
         }
 
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
             DataFileDialogWindow();
         }
-
 
         public MainWindow()
         {
@@ -109,18 +105,18 @@ namespace TSP_Csharp_WPF
         {
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
             openFileDlg.Filter = "TSP files (*tsp.txt)|*tsp.txt";
-            Nullable<bool> result = openFileDlg.ShowDialog();
+            Nullable<bool> result = openFileDlg.ShowDialog(); //open file dialog window 
 
-            if (result == true)
+            if (result == true) //if file selected
             {
-                FileNameLabel.Content = System.IO.Path.GetFileName(openFileDlg.FileName);
+                FileNameLabel.Content = System.IO.Path.GetFileName(openFileDlg.FileName); //show only file name - not whole path
                 filePath = openFileDlg.FileName;
             }
         }
 
-        void DrawCities(List<City> cities, int scale)
+        void DrawCities(List<City> cities, int scale) //draw cities on canvas 
         {
-            foreach (City city in cities)
+            foreach (City city in cities) //every city on list of cities (XY coords)
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -128,41 +124,41 @@ namespace TSP_Csharp_WPF
                     {
                         Stroke = Brushes.DarkRed,
                         Fill = Brushes.DarkRed,
-                        Width = 4,
+                        Width = 4, //size of square
                         Height = 4,
                     };
                     Canvas.SetLeft(square, city.X / scale);
                     Canvas.SetTop(square, city.Y / scale);
-                    Map.Children.Add(square);
+                    Map.Children.Add(square); //add city to canvas in GUI
                 });
             }
         }
 
-        void DrawLines(Tour sciezka, List<City> cities, int scale)
+        void DrawLines(Tour path, List<City> cities, int scale)  //draw lines between cities
         {
             this.Dispatcher.Invoke(() =>
             {
-                Map.Children.Clear();
-                DrawCities(cities, scale);
-                for (int i = 0; i < cities.Count - 1; i++)
+                Map.Children.Clear(); //clear map to delete old routes
+                DrawCities(cities, scale); //draw cities (it could be optimize to not draw cities every time - but works fine so its not necessary)
+                for (int i = 0; i < cities.Count - 1; i++) //for every city in path
                 {
                     Line lin = new Line();
                     lin.Stroke = Brushes.White;
                     lin.StrokeThickness = 2;
-                    lin.X1 = cities[sciezka.PathCities[i]].X / scale + 2;
-                    lin.X2 = cities[sciezka.PathCities[i + 1]].X / scale + 2;
-                    lin.Y1 = cities[sciezka.PathCities[i]].Y / scale + 2;
-                    lin.Y2 = cities[sciezka.PathCities[i + 1]].Y / scale + 2;
+                    lin.X1 = cities[path.PathCities[i]].X / scale + 2; //X coordination - city 1
+                    lin.X2 = cities[path.PathCities[i + 1]].X / scale + 2; //X coordination - city 2
+                    lin.Y1 = cities[path.PathCities[i]].Y / scale + 2; //Y coordination - city 1
+                    lin.Y2 = cities[path.PathCities[i + 1]].Y / scale + 2; //Y coordination - city 2
                     Map.Children.Add(lin);
                 }
                 //connection between last city and first city (back to hometown)
                 Line lin2 = new Line();
                 lin2.Stroke = Brushes.White;
                 lin2.StrokeThickness = 2;
-                lin2.X1 = cities[sciezka.PathCities[0]].X / scale + 2;
-                lin2.X2 = cities[sciezka.PathCities[cities.Count - 1]].X / scale + 2;
-                lin2.Y1 = cities[sciezka.PathCities[0]].Y / scale + 2;
-                lin2.Y2 = cities[sciezka.PathCities[cities.Count - 1]].Y / scale + 2;
+                lin2.X1 = cities[path.PathCities[0]].X / scale + 2;
+                lin2.X2 = cities[path.PathCities[cities.Count - 1]].X / scale + 2;
+                lin2.Y1 = cities[path.PathCities[0]].Y / scale + 2;
+                lin2.Y2 = cities[path.PathCities[cities.Count - 1]].Y / scale + 2;
                 Map.Children.Add(lin2);
             });
         }
@@ -171,7 +167,7 @@ namespace TSP_Csharp_WPF
         {
             int max = int.MinValue;
 
-            foreach (City city in cities)
+            foreach (City city in cities) //find biggest coord value
             {
                 if (city.X > max) max = city.X;
                 if (city.Y > max) max = city.Y;
