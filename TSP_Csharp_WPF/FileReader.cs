@@ -26,8 +26,10 @@ namespace TSP_Csharp_WPF
 
         public static int CalculateDistance(City cityA, City cityB) //calculates distances beetwen cities to create distance matrix
         {
-            double Distance = Math.Pow((cityA.X - cityB.X), 2) + Math.Pow((cityA.Y - cityB.Y), 2); //takes coordinations of 2 points (2D - X,Y)
-            return (int)Math.Round(Math.Sqrt(Distance));
+            int dx = cityA.X - cityB.X;
+            int dy = cityA.Y - cityB.Y;
+            double distanceSquared = dx * dx + dy * dy; //takes coordinations of 2 points (2D - X,Y)
+            return (int)Math.Round(Math.Sqrt(distanceSquared));
         }
 
         public static List<City> ReadFile(string filePath) //read file

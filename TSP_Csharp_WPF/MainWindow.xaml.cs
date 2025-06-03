@@ -26,12 +26,14 @@ namespace TSP_Csharp_WPF
                 Distances.distancesArray = FileReader.CreateDistanceMatrix(CityList); //Create Distances Matrix between cities (Faster calculations during main loop)
 
                 int mapScale = CalculateMapScale(CityList); //adjust map scale to proper show cities on GUI
-                DrawCities(CityList, mapScale); //Draw cities on map
+                DrawCities(CityList, mapScale); //Draw cities on map once
 
                 int individualsInGeneration = (int)SliderIndividuals.Value;
                 int mutationChance = (int)SliderMutation.Value;
                 int crossoverChance = (int)SliderCrossover.Value;
                 int numberOfLoops = 100000; //number of generations
+                LoopProgress.Maximum = numberOfLoops;
+                LoopProgress.Value = 0;
                 int numberOfCities = CityList.Count;
                 Population population = new Population(individualsInGeneration, numberOfCities); //first random population
 
@@ -54,6 +56,7 @@ namespace TSP_Csharp_WPF
                         {
                             DrawLines(population.bestPathInPopulation, CityList, mapScale);
                         }
+                        UpdateProgress(i);
                         UpdateScore(population.lengthofBestPath);
                         UpdateLoopCount(i); //Best score and loop counter is refreshed in every loop repeatation
                     }
@@ -102,6 +105,14 @@ namespace TSP_Csharp_WPF
             });
         }
 
+        void UpdateProgress(int i)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                LoopProgress.Value = i;
+            });
+        }
+
         void DataFileDialogWindow()
         {
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
@@ -115,8 +126,9 @@ namespace TSP_Csharp_WPF
             }
         }
 
-        void DrawCities(List<City> cities, int scale) //draw cities on canvas 
+        void DrawCities(List<City> cities, int scale) //draw cities on canvas
         {
+            CityCanvas.Children.Clear();
             foreach (City city in cities) //every city on list of cities (XY coords)
             {
                 this.Dispatcher.Invoke(() =>
@@ -130,7 +142,7 @@ namespace TSP_Csharp_WPF
                     };
                     Canvas.SetLeft(square, city.X / scale);
                     Canvas.SetTop(square, city.Y / scale);
-                    Map.Children.Add(square); //add city to canvas in GUI
+                    CityCanvas.Children.Add(square); //add city to canvas in GUI
                 });
             }
         }
@@ -139,8 +151,7 @@ namespace TSP_Csharp_WPF
         {
             this.Dispatcher.Invoke(() =>
             {
-                Map.Children.Clear(); //clear map to delete old routes
-                DrawCities(cities, scale); //draw cities (it could be optimize to not draw cities every time - but works fine so its not necessary)
+                Map.Children.Clear(); // clear previous route lines
                 for (int i = 0; i < cities.Count - 1; i++) //for every city in path
                 {
                     Line lin = new Line();
