@@ -38,11 +38,11 @@ namespace TSP_Csharp_WPF
                 tokenSource = new CancellationTokenSource(); //token needed to enable stop option
                 ct = tokenSource.Token;
 
-                Task.Factory.StartNew(async () => //main loop
+                Task.Factory.StartNew(() => //main loop
                 {
                     for (int i = 0; i <= numberOfLoops; i++)
                     {
-                        if (ct.IsCancellationRequested) return; //if button stop is clicked - abort task
+                        if (ct.IsCancellationRequested) break; //if button stop is clicked - abort task
                         population.CrossoverPopulation(crossoverChance);
                         population.Mutation(mutationChance);
                         population.TournamentSelection(10000);
@@ -57,6 +57,11 @@ namespace TSP_Csharp_WPF
                         UpdateScore(population.lengthofBestPath);
                         UpdateLoopCount(i); //Best score and loop counter is refreshed in every loop repeatation
                     }
+
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        StartButton.IsEnabled = true; //enable start button after algorithm is finished or cancelled
+                    });
                 }, tokenSource.Token);
             }
             catch (Exception ex)
@@ -65,7 +70,6 @@ namespace TSP_Csharp_WPF
                 else MessageBox.Show("File not compatibile"); //in case of wrong file type
             }
 
-            StartButton.IsEnabled = true; //enable start button after algorithm is finished
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
