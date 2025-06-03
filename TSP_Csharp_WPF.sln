@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSP_Csharp_WPF", "TSP_Csharp_WPF\TSP_Csharp_WPF.csproj", "{703D0F85-4BDD-4430-A1F1-CECB22E36A6B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSP_Csharp_WPF.Tests", "TSP_Csharp_WPF.Tests\TSP_Csharp_WPF.Tests.csproj", "{3EC62B17-C478-4FE6-9588-8D471BDB122B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,8 +16,12 @@ Global
 		{703D0F85-4BDD-4430-A1F1-CECB22E36A6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{703D0F85-4BDD-4430-A1F1-CECB22E36A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{703D0F85-4BDD-4430-A1F1-CECB22E36A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{703D0F85-4BDD-4430-A1F1-CECB22E36A6B}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
+                {703D0F85-4BDD-4430-A1F1-CECB22E36A6B}.Release|Any CPU.Build.0 = Release|Any CPU
+                {3EC62B17-C478-4FE6-9588-8D471BDB122B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {3EC62B17-C478-4FE6-9588-8D471BDB122B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {3EC62B17-C478-4FE6-9588-8D471BDB122B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {3EC62B17-C478-4FE6-9588-8D471BDB122B}.Release|Any CPU.Build.0 = Release|Any CPU
+        EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
