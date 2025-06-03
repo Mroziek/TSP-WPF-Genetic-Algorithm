@@ -7,12 +7,14 @@
         mc:Ignorable="d"
         Title="WPF TSP SOLVER" Height="829" Width="1000">
     <Grid>
+        <Canvas x:Name="CityCanvas" HorizontalAlignment="Left" Height="800" Margin="194,0,0,0" VerticalAlignment="Top" Width="800" Background="#00FFFFFF" IsHitTestVisible="False"/>
         <Canvas x:Name="Map" HorizontalAlignment="Left" Height="800" Margin="194,0,0,0" VerticalAlignment="Top" Width="800" Background="#FFABABAB"/>
         <Rectangle Fill="#FF710000" HorizontalAlignment="Left" Height="802" Margin="188,0,0,-1.429" Stroke="#FF710000" VerticalAlignment="Top" Width="6"/>
 
         <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="19,371,0,0" VerticalAlignment="Top" Click="StartButton_Click" Height="30" Width="150" FontSize="16" FontWeight="Bold"/>
         <Button x:Name="DataFileButton" Content="Choose Data File" HorizontalAlignment="Left" Margin="19,20,0,0" VerticalAlignment="Top" Width="150" Click="OpenFileButton_Click" Height="30"/>
         <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="19,419,0,0" VerticalAlignment="Top"  Height="30" Width="150" FontSize="16" FontWeight="Bold" Click="StopButton_Click"/>
+        <ProgressBar x:Name="LoopProgress" HorizontalAlignment="Left" Margin="19,450,0,0" VerticalAlignment="Top" Width="150" Height="20"/>
         
         <Slider x:Name="SliderIndividuals" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="7,138,0,0" VerticalAlignment="Top" Width="147" Maximum="400" SmallChange="10" TickPlacement="BottomRight" Value="100" LargeChange="40" TickFrequency="10" Minimum="10"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"><Run FontSize="10" Text="Individuals in Generation"/><Run FontSize="10" Text=" (10 - 400)"/></TextBlock>
