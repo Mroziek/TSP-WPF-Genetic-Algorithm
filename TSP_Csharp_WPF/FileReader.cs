@@ -43,7 +43,7 @@ namespace TSP_Csharp_WPF
                 if (NODE_COORD_TYPE && line != "EOF")
                 {
                     string[] row = line.Trim().Split(' ');
-                    City city = new City(int.Parse(row[1]), int.Parse(row[2])); //dont care about 1 integer in row - it's just ID which start from 0. Dont needed.
+                    City city = new City(int.Parse(row[1]), int.Parse(row[2])); // The first value is just the city ID (starting from 1), so it is ignored.
                     CityList.Add(city);
                 }
 
